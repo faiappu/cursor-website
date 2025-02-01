@@ -51,12 +51,23 @@ new fullpage('#fullpage', {
     }
 });
 
-// Handle navigation clicks
-document.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const sectionIndex = Array.from(link.parentElement.parentElement.children)
-            .indexOf(link.parentElement);
-        fullpage_api.moveTo(sectionIndex + 1);
+// Handle navigation clicks and mobile menu
+document.addEventListener('DOMContentLoaded', function() {
+    const navLinks = document.querySelectorAll('.nav-link');
+    const navbarCollapse = document.querySelector('.navbar-collapse');
+    const bsCollapse = new bootstrap.Collapse(navbarCollapse, {toggle: false});
+
+    navLinks.forEach((link, index) => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            // Move to the section
+            fullpage_api.moveTo(index + 1);
+            
+            // Close mobile menu if open
+            if (window.innerWidth < 992) { // Bootstrap's lg breakpoint
+                bsCollapse.hide();
+            }
+        });
     });
 });
